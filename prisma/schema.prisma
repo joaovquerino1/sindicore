@@ -1,0 +1,278 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("porteiro")
+  phone     String?
+  avatar    String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  condominiums CondominiumUser[]
+  occurrences  Occurrence[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Condominium {
+  id        String   @id @default(cuid())
+  name      String
+  cnpj      String?
+  address   String
+  city      String
+  state     String
+  zipCode   String?
+  phone     String?
+  email     String?
+  logo      String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       CondominiumUser[]
+  towers      Tower[]
+  commonAreas CommonArea[]
+  occurrences Occurrence[]
+  finances    Finance[]
+  notices     Notice[]
+  assemblies  Assembly[]
+}
+
+model CondominiumUser {
+  id            String   @id @default(cuid())
+  userId        String
+  condominiumId String
+  role          String   @default("porteiro")
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, condominiumId])
+}
+
+model Tower {
+  id            String   @id @default(cuid())
+  condominiumId String
+  name          String
+  code          String?
+  order         Int      @default(0)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+  floors      Floor[]
+}
+
+model Floor {
+  id        String   @id @default(cuid())
+  towerId   String
+  name      String
+  number    Int
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tower Tower  @relation(fields: [towerId], references: [id], onDelete: Cascade)
+  units Unit[]
+}
+
+model Unit {
+  id        String   @id @default(cuid())
+  floorId   String
+  number    String
+  type      String   @default("apartamento")
+  area      Float?
+  bedrooms  Int?
+  bathrooms Int?
+  parking   Int?     @default(0)
+  status    String   @default("ocupado")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  floor     Floor      @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  residents Resident[]
+  visitors  Visitor[]
+}
+
+model Resident {
+  id          String    @id @default(cuid())
+  unitId      String
+  name        String
+  cpf         String?
+  rg          String?
+  email       String?
+  phone       String
+  birthDate   DateTime?
+  type        String    @default("proprietario")
+  active      Boolean   @default(true)
+  photo       String?
+  observation String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  unit     Unit      @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  vehicles Vehicle[]
+}
+
+model Vehicle {
+  id         String   @id @default(cuid())
+  residentId String
+  plate      String
+  brand      String?
+  model      String?
+  color      String?
+  year       Int?
+  createdAt  DateTime @default(now())
+
+  resident Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
+}
+
+model Visitor {
+  id           String    @id @default(cuid())
+  unitId       String
+  name         String
+  document     String?
+  phone        String?
+  reason       String?
+  photo        String?
+  vehiclePlate String?
+  status       String    @default("aguardando")
+  entryAt      DateTime?
+  exitAt       DateTime?
+  expectedDate DateTime?
+  authorizedBy String?
+  observation  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+}
+
+model CommonArea {
+  id            String   @id @default(cuid())
+  condominiumId String
+  name          String
+  description   String?
+  capacity      Int?
+  openTime      String?
+  closeTime     String?
+  rules         String?
+  photo         String?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+}
+
+model Booking {
+  id           String   @id @default(cuid())
+  commonAreaId String
+  residentName String
+  unitNumber   String
+  date         DateTime
+  startTime    String
+  endTime      String
+  status       String   @default("confirmado")
+  observation  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  commonArea CommonArea @relation(fields: [commonAreaId], references: [id], onDelete: Cascade)
+}
+
+model Occurrence {
+  id            String    @id @default(cuid())
+  condominiumId String
+  userId        String?
+  title         String
+  description   String
+  category      String    @default("geral")
+  priority      String    @default("media")
+  status        String    @default("aberto")
+  unitNumber    String?
+  attachments   String?
+  resolvedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+  user        User?       @relation(fields: [userId], references: [id])
+}
+
+model Finance {
+  id            String    @id @default(cuid())
+  condominiumId String
+  type          String
+  category      String
+  description   String
+  amount        Float
+  dueDate       DateTime
+  paidDate      DateTime?
+  status        String    @default("pendente")
+  unitNumber    String?
+  observation   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+}
+
+model Notice {
+  id            String    @id @default(cuid())
+  condominiumId String
+  title         String
+  content       String
+  category      String    @default("geral")
+  priority      String    @default("normal")
+  publishedAt   DateTime  @default(now())
+  expiresAt     DateTime?
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+}
+
+model Assembly {
+  id             String    @id @default(cuid())
+  condominiumId  String
+  title          String
+  description    String?
+  agenda         String?
+  type           String    @default("ordinaria")
+  status         String    @default("agendada")
+  scheduledAt    DateTime
+  startedAt      DateTime?
+  endedAt        DateTime?
+  meetingId      String?
+  attendeesCount Int?
+  minutesText    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  condominium Condominium @relation(fields: [condominiumId], references: [id], onDelete: Cascade)
+}
