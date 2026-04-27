@@ -304,15 +304,15 @@ export default function FinanceiroPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                         <XAxis dataKey="mes" tick={{ fontSize: 12, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
                         <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false}
-                          tickFormatter={(v: number) => `R$${v >= 1000 ? `${(v/1000).toFixed(0)}k` : v}`} />
+                          tickFormatter={(v) => `R$${Number(v) >= 1000 ? `${(Number(v)/1000).toFixed(0)}k` : v}`} />
                         <Tooltip
                           contentStyle={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, fontSize: 12 }}
-                          formatter={(value: number, name: string) => [
-                            `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+                          formatter={(value, name) => [
+                            `R$ ${Number(value).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
                             name === "receitas" ? "Receitas" : "Despesas",
                           ]}
                         />
-                        <Legend formatter={(v: string) => v === "receitas" ? "Receitas" : "Despesas"} />
+                        <Legend formatter={(v) => String(v) === "receitas" ? "Receitas" : "Despesas"} />
                         <Bar dataKey="receitas" fill="#22c55e" radius={[4,4,0,0]} />
                         <Bar dataKey="despesas" fill="#ef4444" radius={[4,4,0,0]} />
                       </BarChart>

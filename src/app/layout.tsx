@@ -1,29 +1,46 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
-  title: "SindiCore - Gestão Condominial",
-  description: "Sistema completo de gestão condominial",
-  // PWA / iOS home-screen app metadata
+  title: {
+    default: "SindiCore — Gestão Condominial Inteligente",
+    template: "%s | SindiCore",
+  },
+  description:
+    "Plataforma completa de gestão condominial: moradores, ocorrências, finanças, assembleias com videoconferência e controle de visitantes em tempo real.",
+  keywords: [
+    "condomínio", "síndico", "gestão condominial", "portaria",
+    "assembleia online", "controle financeiro condomínio",
+  ],
+  authors: [{ name: "SindiCore" }],
   appleWebApp: {
     capable: true,
     title: "SindiCore",
     statusBarStyle: "black-translucent",
   },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export const viewport: Viewport = {
-  // Prevents double-tap zoom and ensures the layout fills the entire screen
-  // including the notch / Dynamic Island / home indicator areas
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover",   // ← key for iPhone notch / Dynamic Island
-  themeColor: "#1e293b",
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: dark)",  color: "#0f172a" },
+  ],
 };
 
 export default function RootLayout({
@@ -32,18 +49,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className="h-full">
-      <head>
-        {/* Capacitor / WKWebView live-server connection */}
-        <meta name="format-detection" content="telephone=no" />
-      </head>
+    <html lang="pt-BR" className={`h-full ${inter.variable}`}>
       <body
-        className={`${inter.className} h-full antialiased`}
-        // Prevent iOS rubber-band scroll on the root — each scroll
-        // container manages its own overscroll behaviour
+        className="h-full antialiased font-sans"
         style={{ overscrollBehavior: "none" }}
       >
         {children}
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          theme="light"
+          toastOptions={{
+            classNames: {
+              toast: "shadow-lg border border-slate-200",
+            },
+          }}
+        />
       </body>
     </html>
   );

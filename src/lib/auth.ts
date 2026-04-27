@@ -2,10 +2,13 @@ import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
+import { env } from "./env";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "sindicore-jwt-secret-change-in-production"
-);
+const JWT_SECRET = new TextEncoder().encode(env.JWT_SECRET);
+const JWT_EXPIRY = "7d";
+const COOKIE_NAME = "auth-token";
+
+export { COOKIE_NAME };
 
 export async function hashPassword(password: string) {
   return bcrypt.hash(password, 12);
@@ -19,7 +22,7 @@ export async function createToken(userId: string) {
   return new SignJWT({ userId })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(JWT_EXPIRY)
     .sign(JWT_SECRET);
 }
 
@@ -34,7 +37,7 @@ export async function verifyToken(token: string) {
 
 export async function getSession() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("auth-token")?.value;
+  const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
 
   const payload = await verifyToken(token);
