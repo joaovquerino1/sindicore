@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.claude
+.env
+.env.*
+!.env.example
+dev.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.tsbuildinfo
+*.log
+test-results

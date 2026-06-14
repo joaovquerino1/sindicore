@@ -65,20 +65,20 @@ type DashboardData = {
 // ============================================================
 
 const visitorStatusConfig: Record<string, { label: string; bg: string; text: string; icon: React.ElementType }> = {
-  aguardando: { label: "Aguardando", bg: "bg-amber-50",  text: "text-amber-700",  icon: Clock },
+  aguardando: { label: "Aguardando", bg: "bg-amber-50 dark:bg-amber-500/10",  text: "text-amber-700 dark:text-amber-300",  icon: Clock },
   autorizado: { label: "Autorizado", bg: "bg-emerald-50", text: "text-emerald-700", icon: CheckCircle2 },
-  negado:     { label: "Negado",     bg: "bg-red-50",    text: "text-red-700",    icon: XCircle },
-  saiu:       { label: "Saiu",       bg: "bg-slate-100", text: "text-slate-600",  icon: ArrowRight },
+  negado:     { label: "Negado",     bg: "bg-red-50 dark:bg-red-500/10",    text: "text-red-700 dark:text-red-300",    icon: XCircle },
+  saiu:       { label: "Saiu",       bg: "bg-slate-100 dark:bg-slate-800", text: "text-slate-600 dark:text-slate-300",  icon: ArrowRight },
 };
 
 const priorityConfig: Record<string, { label: string; bg: string; text: string; ring: string }> = {
   baixa:   { label: "Baixa",   bg: "bg-sky-50",     text: "text-sky-700",     ring: "ring-sky-200" },
-  media:   { label: "Média",   bg: "bg-amber-50",   text: "text-amber-700",   ring: "ring-amber-200" },
-  alta:    { label: "Alta",    bg: "bg-orange-50",  text: "text-orange-700",  ring: "ring-orange-200" },
-  urgente: { label: "Urgente", bg: "bg-red-50",     text: "text-red-700",     ring: "ring-red-200" },
+  media:   { label: "Média",   bg: "bg-amber-50 dark:bg-amber-500/10",   text: "text-amber-700 dark:text-amber-300",   ring: "ring-amber-200" },
+  alta:    { label: "Alta",    bg: "bg-orange-50 dark:bg-orange-500/10",  text: "text-orange-700 dark:text-orange-300",  ring: "ring-orange-200" },
+  urgente: { label: "Urgente", bg: "bg-red-50 dark:bg-red-500/10",     text: "text-red-700 dark:text-red-300",     ring: "ring-red-200" },
 };
 
-const PIE_COLORS = ["#2563eb", "#94a3b8", "#f59e0b"];
+const PIE_COLORS = ["#8b5cf6", "#9d94b3", "#f59e0b"];
 
 // ============================================================
 // KPI Card
@@ -96,27 +96,27 @@ function KpiCard({
   href?: string;
 }) {
   const colors = {
-    blue:    { bg: "bg-blue-50",    text: "text-blue-600",    ring: "ring-blue-100",    accent: "from-blue-500/10 to-transparent" },
+    blue:    { bg: "bg-blue-50 dark:bg-blue-500/10",    text: "text-blue-600 dark:text-blue-300",    ring: "ring-blue-100",    accent: "from-blue-500/10 to-transparent" },
     emerald: { bg: "bg-emerald-50", text: "text-emerald-600", ring: "ring-emerald-100", accent: "from-emerald-500/10 to-transparent" },
     violet:  { bg: "bg-violet-50",  text: "text-violet-600",  ring: "ring-violet-100",  accent: "from-violet-500/10 to-transparent" },
-    orange:  { bg: "bg-orange-50",  text: "text-orange-600",  ring: "ring-orange-100",  accent: "from-orange-500/10 to-transparent" },
+    orange:  { bg: "bg-orange-50 dark:bg-orange-500/10",  text: "text-orange-600 dark:text-orange-300",  ring: "ring-orange-100",  accent: "from-orange-500/10 to-transparent" },
     rose:    { bg: "bg-rose-50",    text: "text-rose-600",    ring: "ring-rose-100",    accent: "from-rose-500/10 to-transparent" },
   }[color];
 
   const inner = (
-    <Card className="relative overflow-hidden card-hover border-slate-200/70">
+    <Card className="relative overflow-hidden card-hover border-slate-200 dark:border-slate-800/70">
       <div className={`absolute inset-0 bg-gradient-to-br ${colors.accent} pointer-events-none`} />
       <CardContent className="relative p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               {title}
             </p>
-            <p className="text-3xl font-bold text-slate-900 mt-2 leading-none tabular-nums">
+            <p className="text-3xl font-bold text-slate-900 dark:text-slate-100 mt-2 leading-none tabular-nums">
               {value}
             </p>
             {subtitle && (
-              <p className="text-xs text-slate-500 mt-2">{subtitle}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">{subtitle}</p>
             )}
             {trend && (
               <div className={`inline-flex items-center gap-1 text-xs font-medium mt-2 ${
@@ -186,11 +186,11 @@ export default function DashboardPage() {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px] text-center px-4">
-          <div className="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-5">
-            <Building2 className="h-10 w-10 text-slate-300" />
+          <div className="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-5">
+            <Building2 className="h-10 w-10 text-slate-300 dark:text-slate-600" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-700">Nenhum condomínio selecionado</h2>
-          <p className="text-sm text-slate-500 mt-1 max-w-sm">
+          <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200">Nenhum condomínio selecionado</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
             Selecione um condomínio no menu superior para visualizar o dashboard.
           </p>
         </div>
@@ -222,15 +222,15 @@ export default function DashboardPage() {
         {/* Header com saudação */}
         <div className="flex items-end justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
               {greeting}{firstName && `, ${firstName}`} 👋
             </h1>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               Aqui está o panorama atualizado do seu condomínio.
             </p>
           </div>
           {stats && stats.urgentOccurrences > 0 && (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-medium animate-pulse-soft">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-300 text-sm font-medium animate-pulse-soft">
               <AlertTriangle className="h-4 w-4" />
               {stats.urgentOccurrences} ocorrência{stats.urgentOccurrences > 1 ? "s" : ""} urgente{stats.urgentOccurrences > 1 ? "s" : ""}
             </div>
@@ -271,53 +271,53 @@ export default function DashboardPage() {
 
             {/* KPI Row Secundário */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
                     <DollarSign className="h-4 w-4 text-emerald-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Receita do mês</p>
-                    <p className="text-base font-bold text-slate-900 tabular-nums">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Receita do mês</p>
+                    <p className="text-base font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                       {formatCurrency(stats?.monthlyRevenue ?? 0)}
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center">
-                    <Clock className="h-4 w-4 text-orange-600" />
+                  <div className="w-9 h-9 rounded-lg bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center">
+                    <Clock className="h-4 w-4 text-orange-600 dark:text-orange-300" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Pendências</p>
-                    <p className="text-base font-bold text-slate-900 tabular-nums">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Pendências</p>
+                    <p className="text-base font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                       {formatCurrency(stats?.pendingFinancesAmount ?? 0)}
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center">
                     <Bell className="h-4 w-4 text-violet-600" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Avisos ativos</p>
-                    <p className="text-base font-bold text-slate-900 tabular-nums">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Avisos ativos</p>
+                    <p className="text-base font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                       {stats?.activeNotices ?? 0}
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <Car className="h-4 w-4 text-blue-600" />
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+                    <Car className="h-4 w-4 text-blue-600 dark:text-blue-300" />
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Veículos</p>
-                    <p className="text-base font-bold text-slate-900 tabular-nums">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Veículos</p>
+                    <p className="text-base font-bold text-slate-900 dark:text-slate-100 tabular-nums">
                       {stats?.totalVehicles ?? 0}
                     </p>
                   </div>
@@ -326,11 +326,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Gráfico de tendência financeira */}
-            <Card className="border-slate-200/70">
+            <Card className="border-slate-200 dark:border-slate-800/70">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
-                  <CardTitle className="text-base font-semibold text-slate-900 flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-blue-600" />
+                  <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-blue-600 dark:text-blue-300" />
                     Fluxo financeiro — Últimos 6 meses
                   </CardTitle>
                   <CardDescription>Evolução de receitas e despesas</CardDescription>
@@ -352,7 +352,7 @@ export default function DashboardPage() {
                         <stop offset="100%" stopColor="#ef4444" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                     <XAxis
                       dataKey="month"
                       tick={{ fill: "#64748b", fontSize: 12 }}
@@ -393,9 +393,9 @@ export default function DashboardPage() {
             {/* Charts + Visitors */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               {/* Ocupação */}
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-semibold text-slate-700">Ocupação</CardTitle>
+                  <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">Ocupação</CardTitle>
                   <CardDescription>Distribuição de unidades</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -419,8 +419,8 @@ export default function DashboardPage() {
                     {/* Centro do donut */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-slate-900">{stats?.occupancyRate ?? 0}%</p>
-                        <p className="text-[10px] text-slate-500 uppercase tracking-wider">Ocupação</p>
+                        <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats?.occupancyRate ?? 0}%</p>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ocupação</p>
                       </div>
                     </div>
                   </div>
@@ -428,7 +428,7 @@ export default function DashboardPage() {
                     {occupancyData.map((item, i) => (
                       <div key={item.name} className="flex items-center gap-1.5">
                         <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: PIE_COLORS[i] }} />
-                        <span className="text-xs text-slate-600">
+                        <span className="text-xs text-slate-600 dark:text-slate-300">
                           {item.name}: <strong className="tabular-nums">{item.value}</strong>
                         </span>
                       </div>
@@ -438,10 +438,10 @@ export default function DashboardPage() {
               </Card>
 
               {/* Visitantes recentes */}
-              <Card className="lg:col-span-2 border-slate-200/70">
+              <Card className="lg:col-span-2 border-slate-200 dark:border-slate-800/70">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-sm font-semibold text-slate-700">Visitantes Recentes</CardTitle>
+                    <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">Visitantes Recentes</CardTitle>
                     <CardDescription>Últimas entradas registradas</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" className="h-8 text-xs" asChild>
@@ -463,8 +463,8 @@ export default function DashboardPage() {
                                 <Icon className={`h-4 w-4 ${sc.text}`} />
                               </div>
                               <div className="min-w-0">
-                                <p className="text-sm font-medium text-slate-800 truncate">{v.name}</p>
-                                <p className="text-xs text-slate-500 truncate">
+                                <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">{v.name}</p>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                                   {v.unit?.number ? `Ap. ${v.unit.number}` : "—"}
                                   {v.reason && ` · ${v.reason}`}
                                 </p>
@@ -474,7 +474,7 @@ export default function DashboardPage() {
                               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${sc.bg} ${sc.text}`}>
                                 {sc.label}
                               </span>
-                              <span className="text-xs text-slate-400 hidden sm:block tabular-nums">
+                              <span className="text-xs text-slate-400 dark:text-slate-500 hidden sm:block tabular-nums">
                                 {formatDateTime(v.createdAt)}
                               </span>
                             </div>
@@ -490,10 +490,10 @@ export default function DashboardPage() {
             {/* Bottom row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               {/* Próximas assembleias */}
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-sm font-semibold text-slate-700">Próximas Assembleias</CardTitle>
+                    <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">Próximas Assembleias</CardTitle>
                     <CardDescription>Agendadas e em andamento</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" className="h-8 text-xs" asChild>
@@ -506,13 +506,13 @@ export default function DashboardPage() {
                   ) : (
                     <div className="space-y-2.5">
                       {data.upcomingAssemblies.map((a) => (
-                        <div key={a.id} className="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:border-blue-300 hover:bg-blue-50/30 transition-colors">
-                          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <Calendar className="h-4 w-4 text-blue-600" />
+                        <div key={a.id} className="flex items-start gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-500/10/30 transition-colors">
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                            <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-300" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">{a.title}</p>
-                            <p className="text-xs text-slate-500 mt-0.5">
+                            <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">{a.title}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                               {new Date(a.scheduledAt).toLocaleString("pt-BR", {
                                 day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
                               })}
@@ -526,10 +526,10 @@ export default function DashboardPage() {
               </Card>
 
               {/* Ocorrências recentes */}
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-sm font-semibold text-slate-700">Ocorrências Recentes</CardTitle>
+                    <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">Ocorrências Recentes</CardTitle>
                     <CardDescription>Últimos chamados</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" className="h-8 text-xs" asChild>
@@ -545,12 +545,12 @@ export default function DashboardPage() {
                         const pc = priorityConfig[o.priority] || priorityConfig.media;
                         return (
                           <div key={o.id} className="flex items-center gap-3 py-2.5">
-                            <div className="w-7 h-7 rounded-md bg-orange-50 flex items-center justify-center flex-shrink-0">
+                            <div className="w-7 h-7 rounded-md bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center flex-shrink-0">
                               <AlertTriangle className="h-3.5 w-3.5 text-orange-500" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-slate-800 truncate">{o.title}</p>
-                              <p className="text-xs text-slate-400 tabular-nums">{formatDateTime(o.createdAt)}</p>
+                              <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">{o.title}</p>
+                              <p className="text-xs text-slate-400 dark:text-slate-500 tabular-nums">{formatDateTime(o.createdAt)}</p>
                             </div>
                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${pc.bg} ${pc.text}`}>
                               {pc.label}
@@ -564,10 +564,10 @@ export default function DashboardPage() {
               </Card>
 
               {/* Financeiro */}
-              <Card className="border-slate-200/70">
+              <Card className="border-slate-200 dark:border-slate-800/70">
                 <CardHeader className="pb-2 flex flex-row items-center justify-between">
                   <div>
-                    <CardTitle className="text-sm font-semibold text-slate-700">Últimos Lançamentos</CardTitle>
+                    <CardTitle className="text-sm font-semibold text-slate-700 dark:text-slate-200">Últimos Lançamentos</CardTitle>
                     <CardDescription>Movimentação financeira</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" className="h-8 text-xs" asChild>
@@ -585,10 +585,10 @@ export default function DashboardPage() {
                             <div className={`w-1 h-8 rounded-full flex-shrink-0 ${
                               f.type === "receita" ? "bg-emerald-500" : "bg-red-400"
                             }`} />
-                            <span className="text-sm text-slate-700 truncate">{f.description}</span>
+                            <span className="text-sm text-slate-700 dark:text-slate-200 truncate">{f.description}</span>
                           </div>
                           <span className={`text-sm font-semibold flex-shrink-0 tabular-nums ${
-                            f.type === "receita" ? "text-emerald-600" : "text-red-500"
+                            f.type === "receita" ? "text-emerald-600" : "text-red-500 dark:text-red-300"
                           }`}>
                             {f.type === "receita" ? "+" : "−"}{formatCurrency(f.amount)}
                           </span>
@@ -613,8 +613,8 @@ export default function DashboardPage() {
 function EmptyState({ icon: Icon, message }: { icon: React.ElementType; message: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <Icon className="h-8 w-8 text-slate-200 mb-2" />
-      <p className="text-sm text-slate-400">{message}</p>
+      <Icon className="h-8 w-8 text-slate-200 dark:text-slate-700 mb-2" />
+      <p className="text-sm text-slate-400 dark:text-slate-500">{message}</p>
     </div>
   );
 }

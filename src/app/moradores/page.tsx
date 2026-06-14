@@ -6,9 +6,11 @@ import { AppLayout } from "@/components/layout/app-layout";
 import { getInitials } from "@/lib/utils";
 import {
   Users, Plus, Search, Loader2, Phone, Mail, Car, Home, Pencil, Trash2, X, Upload,
+  LayoutGrid, LayoutList,
 } from "lucide-react";
 import { ExportMenu } from "@/components/export-menu";
 import { ImportModal } from "@/components/import-modal";
+import { ViewSwitcher } from "@/components/shared/view-switcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,9 +36,9 @@ interface Resident {
 }
 
 const typeConfig: Record<string, string> = {
-  proprietario: "bg-blue-100 text-blue-800",
-  inquilino: "bg-purple-100 text-purple-800",
-  dependente: "bg-green-100 text-green-800",
+  proprietario: "bg-blue-100 dark:bg-blue-500/15 text-blue-800 dark:text-blue-300",
+  inquilino: "bg-purple-100 dark:bg-purple-500/15 text-purple-800 dark:text-purple-300",
+  dependente: "bg-green-100 dark:bg-green-500/15 text-green-800 dark:text-green-300",
 };
 const typeLabels: Record<string, string> = {
   proprietario: "Proprietário", inquilino: "Inquilino", dependente: "Dependente",
@@ -56,6 +58,7 @@ export default function MoradoresPage() {
   const [addingVehicle, setAddingVehicle] = useState(false);
   const [savingVehicle, setSavingVehicle] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const loadResidents = useCallback(async () => {
     if (!currentCondominiumId) return;
@@ -152,8 +155,8 @@ export default function MoradoresPage() {
       <div className="space-y-5 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Moradores</h1>
-            <p className="text-slate-500 text-sm mt-0.5">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Moradores</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">
               {residents.length} morador{residents.length !== 1 ? "es" : ""} cadastrado{residents.length !== 1 ? "s" : ""}
             </p>
           </div>
@@ -171,27 +174,37 @@ export default function MoradoresPage() {
           </div>
         </div>
 
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input className="pl-9" placeholder="Buscar por nome, email, CPF, telefone..."
-            value={search} onChange={(e) => setSearch(e.target.value)} />
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
+            <Input className="pl-9" placeholder="Buscar por nome, email, CPF, telefone..."
+              value={search} onChange={(e) => setSearch(e.target.value)} />
+          </div>
+          <ViewSwitcher
+            value={viewMode}
+            onChange={setViewMode}
+            options={[
+              { value: "grid", label: "Cards", icon: LayoutGrid },
+              { value: "list", label: "Lista", icon: LayoutList },
+            ]}
+          />
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center h-40">
-            <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+            <Loader2 className="h-6 w-6 animate-spin text-slate-400 dark:text-slate-500" />
           </div>
         ) : residents.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16">
-              <Users className="h-12 w-12 text-slate-200 mb-4" />
-              <p className="text-slate-500">Nenhum morador encontrado</p>
+              <Users className="h-12 w-12 text-slate-200 dark:text-slate-700 mb-4" />
+              <p className="text-slate-500 dark:text-slate-400">Nenhum morador encontrado</p>
               <Button className="mt-4 gap-2 bg-blue-600 hover:bg-blue-700 text-white" onClick={openCreate}>
                 <Plus className="h-4 w-4" /> Cadastrar Morador
               </Button>
             </CardContent>
           </Card>
-        ) : (
+        ) : viewMode === "grid" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {residents.map((resident) => (
               <Card key={resident.id} className="hover:shadow-md transition-shadow">
@@ -199,12 +212,12 @@ export default function MoradoresPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
-                        <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
+                        <AvatarFallback className="bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 font-semibold">
                           {getInitials(resident.name)}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-semibold text-slate-900">{resident.name}</h3>
+                        <h3 className="font-semibold text-slate-900 dark:text-slate-100">{resident.name}</h3>
                         <Badge variant="secondary" className={`text-xs mt-0.5 ${typeConfig[resident.type]}`}>
                           {typeLabels[resident.type]}
                         </Badge>
@@ -214,32 +227,32 @@ export default function MoradoresPage() {
                       <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(resident)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 hover:text-red-600"
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
                         onClick={() => handleDelete(resident.id)}>
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </div>
                   <div className="mt-4 space-y-1.5">
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <Home className="h-3.5 w-3.5 text-slate-400" />
+                    <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                      <Home className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                       <span>Apto {resident.unit.number} · {resident.unit.floor.tower.name}</span>
                     </div>
                     {resident.phone && (
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Phone className="h-3.5 w-3.5 text-slate-400" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <Phone className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                         <span>{resident.phone}</span>
                       </div>
                     )}
                     {resident.email && (
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Mail className="h-3.5 w-3.5 text-slate-400" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <Mail className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                         <span className="truncate">{resident.email}</span>
                       </div>
                     )}
                     {resident.vehicles.length > 0 && (
-                      <div className="flex items-center gap-2 text-sm text-slate-600">
-                        <Car className="h-3.5 w-3.5 text-slate-400" />
+                      <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+                        <Car className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                         <span>{resident.vehicles.map((v) => v.plate).join(", ")}</span>
                       </div>
                     )}
@@ -248,6 +261,67 @@ export default function MoradoresPage() {
               </Card>
             ))}
           </div>
+        ) : (
+          <Card>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-medium">Morador</th>
+                    <th className="text-left px-4 py-3 font-medium">Tipo</th>
+                    <th className="text-left px-4 py-3 font-medium">Unidade</th>
+                    <th className="text-left px-4 py-3 font-medium hidden md:table-cell">Telefone</th>
+                    <th className="text-left px-4 py-3 font-medium hidden lg:table-cell">E-mail</th>
+                    <th className="text-left px-4 py-3 font-medium hidden xl:table-cell">Veículos</th>
+                    <th className="px-4 py-3 w-20"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {residents.map((r) => (
+                    <tr key={r.id} className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <Avatar className="h-8 w-8">
+                            <AvatarFallback className="bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+                              {getInitials(r.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium text-slate-900 dark:text-slate-100">{r.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Badge variant="secondary" className={`text-xs ${typeConfig[r.type]}`}>
+                          {typeLabels[r.type]}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                        Apto {r.unit.number}
+                        <span className="text-slate-400 dark:text-slate-500 text-xs ml-1">· {r.unit.floor.tower.name}</span>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden md:table-cell">{r.phone || "—"}</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden lg:table-cell">
+                        <span className="truncate block max-w-[220px]">{r.email || "—"}</span>
+                      </td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden xl:table-cell">
+                        {r.vehicles.length > 0 ? r.vehicles.map((v) => v.plate).join(", ") : "—"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(r)}>
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
+                            onClick={() => handleDelete(r.id)}>
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
         )}
       </div>
 
@@ -325,21 +399,21 @@ export default function MoradoresPage() {
 
             <TabsContent value="veiculos" className="mt-4 space-y-3">
               {vehicles.length === 0 && !addingVehicle && (
-                <p className="text-slate-400 text-sm text-center py-4">Nenhum veículo cadastrado</p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm text-center py-4">Nenhum veículo cadastrado</p>
               )}
 
               {vehicles.map((v) => (
-                <div key={v.id} className="flex items-center justify-between p-3 rounded-lg border bg-slate-50">
+                <div key={v.id} className="flex items-center justify-between p-3 rounded-lg border bg-slate-50 dark:bg-slate-900/50">
                   <div className="flex items-center gap-2">
-                    <Car className="h-4 w-4 text-slate-400" />
+                    <Car className="h-4 w-4 text-slate-400 dark:text-slate-500" />
                     <div>
-                      <p className="font-semibold text-sm text-slate-900">{v.plate}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">{v.plate}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         {[v.brand, v.model, v.color].filter(Boolean).join(" · ") || "Sem detalhes"}
                       </p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 hover:text-red-600"
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
                     onClick={() => handleDeleteVehicle(v.id)}>
                     <X className="h-3.5 w-3.5" />
                   </Button>
@@ -347,8 +421,8 @@ export default function MoradoresPage() {
               ))}
 
               {addingVehicle ? (
-                <div className="border rounded-lg p-3 space-y-3 bg-blue-50">
-                  <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Novo Veículo</p>
+                <div className="border rounded-lg p-3 space-y-3 bg-blue-50 dark:bg-blue-500/10">
+                  <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wide">Novo Veículo</p>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="col-span-2 space-y-1">
                       <Label className="text-xs">Placa *</Label>

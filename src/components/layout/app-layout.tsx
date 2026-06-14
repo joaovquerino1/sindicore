@@ -33,17 +33,17 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="h-8 w-8 rounded-full border-4 border-blue-600 border-t-transparent animate-spin" />
-          <p className="text-sm text-slate-500">Carregando...</p>
+          <p className="text-sm text-muted-foreground">Carregando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header />

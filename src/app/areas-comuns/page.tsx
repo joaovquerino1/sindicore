@@ -6,7 +6,9 @@ import { AppLayout } from "@/components/layout/app-layout";
 import { formatDate } from "@/lib/utils";
 import {
   CalendarDays, Plus, Clock, Users, Loader2, Trash2, CheckCircle2, XCircle, List, Pencil,
+  LayoutGrid, LayoutList,
 } from "lucide-react";
+import { ViewSwitcher } from "@/components/shared/view-switcher";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,9 +35,9 @@ interface Booking {
 }
 
 const bookingStatus: Record<string, { label: string; color: string }> = {
-  confirmado: { label: "Confirmado", color: "bg-green-100 text-green-700" },
-  cancelado:  { label: "Cancelado",  color: "bg-red-100 text-red-700" },
-  pendente:   { label: "Pendente",   color: "bg-amber-100 text-amber-700" },
+  confirmado: { label: "Confirmado", color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-300" },
+  cancelado:  { label: "Cancelado",  color: "bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-300" },
+  pendente:   { label: "Pendente",   color: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300" },
 };
 
 export default function AreasComunsPage() {
@@ -48,6 +50,7 @@ export default function AreasComunsPage() {
   const [editingAreaId, setEditingAreaId] = useState<string | null>(null);
   const [bookingDialog, setBookingDialog] = useState(false);
   const [selectedAreaId, setSelectedAreaId] = useState<string>("");
+  const [areaView, setAreaView] = useState<"grid" | "list">("grid");
   const [areaForm, setAreaForm] = useState({
     name: "", description: "", capacity: "", openTime: "08:00", closeTime: "22:00", rules: "",
   });
@@ -158,8 +161,8 @@ export default function AreasComunsPage() {
       <div className="space-y-5 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Áreas Comuns</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Gestão e reservas de espaços compartilhados</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Áreas Comuns</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gestão e reservas de espaços compartilhados</p>
           </div>
           <Button onClick={() => setAreaDialog(true)} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
             <Plus className="h-4 w-4" /> Nova Área
@@ -172,22 +175,34 @@ export default function AreasComunsPage() {
             <TabsTrigger value="reservas">Reservas ({upcoming.length})</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="areas" className="mt-4">
+          <TabsContent value="areas" className="mt-4 space-y-3">
+            {areas.length > 0 && !loading && (
+              <div className="flex justify-end">
+                <ViewSwitcher
+                  value={areaView}
+                  onChange={setAreaView}
+                  options={[
+                    { value: "grid", label: "Cards", icon: LayoutGrid },
+                    { value: "list", label: "Lista", icon: LayoutList },
+                  ]}
+                />
+              </div>
+            )}
             {loading ? (
               <div className="flex items-center justify-center h-40">
-                <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+                <Loader2 className="h-6 w-6 animate-spin text-slate-400 dark:text-slate-500" />
               </div>
             ) : areas.length === 0 ? (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-16">
-                  <CalendarDays className="h-12 w-12 text-slate-200 mb-4" />
-                  <p className="text-slate-500">Nenhuma área comum cadastrada</p>
+                  <CalendarDays className="h-12 w-12 text-slate-200 dark:text-slate-700 mb-4" />
+                  <p className="text-slate-500 dark:text-slate-400">Nenhuma área comum cadastrada</p>
                   <Button className="mt-4 gap-2 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setAreaDialog(true)}>
                     <Plus className="h-4 w-4" /> Cadastrar Área
                   </Button>
                 </CardContent>
               </Card>
-            ) : (
+            ) : areaView === "grid" ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {areas.map((area) => (
                   <Card key={area.id} className="hover:shadow-md transition-shadow">
@@ -204,7 +219,7 @@ export default function AreasComunsPage() {
                             onClick={() => openEditArea(area)}>
                             <Pencil className="h-3.5 w-3.5" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 hover:text-red-600"
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
                             onClick={() => handleDeleteArea(area.id)}>
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>
@@ -212,32 +227,32 @@ export default function AreasComunsPage() {
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0 space-y-3">
-                      <div className="flex flex-wrap gap-3 text-sm text-slate-600">
+                      <div className="flex flex-wrap gap-3 text-sm text-slate-600 dark:text-slate-300">
                         {area.capacity && (
                           <div className="flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5 text-slate-400" />
+                            <Users className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                             <span>Até {area.capacity} pessoas</span>
                           </div>
                         )}
                         {area.openTime && area.closeTime && (
                           <div className="flex items-center gap-1.5">
-                            <Clock className="h-3.5 w-3.5 text-slate-400" />
+                            <Clock className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                             <span>{area.openTime} – {area.closeTime}</span>
                           </div>
                         )}
                         <div className="flex items-center gap-1.5">
-                          <CalendarDays className="h-3.5 w-3.5 text-slate-400" />
+                          <CalendarDays className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                           <span>{area._count.bookings} reservas</span>
                         </div>
                       </div>
 
                       {area.bookings.length > 0 && (
                         <div className="space-y-1.5 pt-2 border-t">
-                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Próximas</p>
+                          <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Próximas</p>
                           {area.bookings.slice(0, 3).map((b) => (
-                            <div key={b.id} className="flex items-center justify-between text-xs bg-slate-50 rounded px-2 py-1.5">
+                            <div key={b.id} className="flex items-center justify-between text-xs bg-slate-50 dark:bg-slate-900/50 rounded px-2 py-1.5">
                               <span className="font-medium">{b.residentName}</span>
-                              <span className="text-slate-500">{formatDate(b.date)} · {b.startTime}–{b.endTime}</span>
+                              <span className="text-slate-500 dark:text-slate-400">{formatDate(b.date)} · {b.startTime}–{b.endTime}</span>
                             </div>
                           ))}
                         </div>
@@ -251,6 +266,69 @@ export default function AreasComunsPage() {
                   </Card>
                 ))}
               </div>
+            ) : (
+              <Card>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      <tr>
+                        <th className="text-left px-4 py-3 font-medium">Área</th>
+                        <th className="text-left px-4 py-3 font-medium hidden md:table-cell">Capacidade</th>
+                        <th className="text-left px-4 py-3 font-medium hidden md:table-cell">Horário</th>
+                        <th className="text-left px-4 py-3 font-medium">Reservas</th>
+                        <th className="text-right px-4 py-3 font-medium w-44">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {areas.map((area) => (
+                        <tr key={area.id} className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                          <td className="px-4 py-3">
+                            <p className="font-medium text-slate-900 dark:text-slate-100">{area.name}</p>
+                            {area.description && (
+                              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{area.description}</p>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden md:table-cell">
+                            {area.capacity ? (
+                              <span className="inline-flex items-center gap-1.5">
+                                <Users className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                                {area.capacity}
+                              </span>
+                            ) : "—"}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden md:table-cell">
+                            {area.openTime && area.closeTime ? (
+                              <span className="inline-flex items-center gap-1.5">
+                                <Clock className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                                {area.openTime}–{area.closeTime}
+                              </span>
+                            ) : "—"}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Badge variant="secondary" className="text-xs">{area._count.bookings}</Badge>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex justify-end gap-1">
+                              <Button size="sm" variant="outline" className="h-7 gap-1 text-xs"
+                                onClick={() => { setSelectedAreaId(area.id); setBookingDialog(true); }}>
+                                <CalendarDays className="h-3.5 w-3.5" /> Reservar
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7"
+                                onClick={() => openEditArea(area)}>
+                                <Pencil className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
+                                onClick={() => handleDeleteArea(area.id)}>
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
             )}
           </TabsContent>
 
@@ -258,8 +336,8 @@ export default function AreasComunsPage() {
             {bookings.length === 0 ? (
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
-                  <List className="h-10 w-10 text-slate-200 mb-3" />
-                  <p className="text-slate-400">Nenhuma reserva registrada</p>
+                  <List className="h-10 w-10 text-slate-200 dark:text-slate-700 mb-3" />
+                  <p className="text-slate-400 dark:text-slate-500">Nenhuma reserva registrada</p>
                 </CardContent>
               </Card>
             ) : (
@@ -272,14 +350,14 @@ export default function AreasComunsPage() {
                         <div className="flex items-center justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <p className="font-medium text-slate-900">{b.residentName}</p>
+                              <p className="font-medium text-slate-900 dark:text-slate-100">{b.residentName}</p>
                               <Badge variant="outline" className="text-xs">Unid. {b.unitNumber}</Badge>
                               {b.commonArea && (
                                 <Badge variant="secondary" className="text-xs">{b.commonArea.name}</Badge>
                               )}
                               <Badge className={`text-xs ${sc.color}`}>{sc.label}</Badge>
                             </div>
-                            <p className="text-sm text-slate-500 mt-0.5">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                               {formatDate(b.date)} · {b.startTime} – {b.endTime}
                               {b.observation && ` · ${b.observation}`}
                             </p>
@@ -287,14 +365,14 @@ export default function AreasComunsPage() {
                           {b.status !== "cancelado" && (
                             <div className="flex gap-1 flex-shrink-0">
                               <Button size="sm" variant="outline"
-                                className="text-red-600 border-red-200 hover:bg-red-50 gap-1"
+                                className="text-red-600 dark:text-red-300 border-red-200 dark:border-red-500/30 hover:bg-red-50 dark:hover:bg-red-500/10 gap-1"
                                 onClick={() => handleCancelBooking(b.id)}>
                                 <XCircle className="h-3.5 w-3.5" /> Cancelar
                               </Button>
                             </div>
                           )}
                           {b.status === "cancelado" && (
-                            <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-400"
+                            <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-400 dark:text-slate-500"
                               onClick={() => handleDeleteBooking(b.id)}>
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
@@ -357,7 +435,7 @@ export default function AreasComunsPage() {
           <DialogHeader>
             <DialogTitle>Nova Reserva</DialogTitle>
             {selectedAreaId && areas.find((a) => a.id === selectedAreaId) && (
-              <p className="text-sm text-slate-500">{areas.find((a) => a.id === selectedAreaId)?.name}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">{areas.find((a) => a.id === selectedAreaId)?.name}</p>
             )}
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4">

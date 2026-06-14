@@ -8,7 +8,7 @@ import {
   Users,
   AlertTriangle,
   DollarSign,
-  Video,
+  MessageSquare,
 } from "lucide-react";
 
 // The 5 most-used sections become primary iOS tab bar items.
@@ -18,7 +18,7 @@ const tabs = [
   { href: "/moradores",   label: "Moradores",    icon: Users },
   { href: "/ocorrencias", label: "Ocorrências",  icon: AlertTriangle },
   { href: "/financeiro",  label: "Financeiro",   icon: DollarSign },
-  { href: "/assembleias", label: "Assembleias",  icon: Video },
+  { href: "/chat",        label: "Chat",         icon: MessageSquare },
 ];
 
 export function BottomNav() {
@@ -29,7 +29,7 @@ export function BottomNav() {
     <nav
       className={cn(
         "fixed bottom-0 inset-x-0 z-40 lg:hidden",
-        "bg-white border-t border-slate-200",
+        "bg-card border-t border-border",
         // Respect the iOS home-indicator safe area
         "pb-[env(safe-area-inset-bottom)]"
       )}
@@ -43,7 +43,7 @@ export function BottomNav() {
               href={href}
               className={cn(
                 "flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors",
-                active ? "text-blue-600" : "text-slate-400"
+                active ? "text-blue-600 dark:text-blue-300" : "text-muted-foreground"
               )}
             >
               <Icon
@@ -56,7 +56,7 @@ export function BottomNav() {
               <span
                 className={cn(
                   "text-[10px] font-medium leading-none",
-                  active ? "text-blue-600" : "text-slate-400"
+                  active ? "text-blue-600 dark:text-blue-300" : "text-muted-foreground"
                 )}
               >
                 {label}

@@ -153,8 +153,8 @@ export default function ConfiguracoesPage() {
     <AppLayout>
       <div className="space-y-5 max-w-2xl mx-auto">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Configurações</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Gerencie seus condomínios, perfil e preferências</p>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Configurações</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gerencie seus condomínios, perfil e preferências</p>
         </div>
 
         {/* Profile Card */}
@@ -169,13 +169,13 @@ export default function ConfiguracoesPage() {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
-                  <AvatarFallback className="bg-blue-100 text-blue-700 text-lg font-bold">
+                  <AvatarFallback className="bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 text-lg font-bold">
                     {getInitials(user.name)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <h3 className="font-semibold text-lg">{user.name}</h3>
-                  <p className="text-slate-500 text-sm">{user.email}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">{user.email}</p>
                   <Badge variant="secondary" className="mt-1">
                     {roleLabels[user.role] || user.role}
                   </Badge>
@@ -204,8 +204,8 @@ export default function ConfiguracoesPage() {
           <CardContent>
             {!user?.condominiums?.length ? (
               <div className="text-center py-8">
-                <Building2 className="h-10 w-10 mx-auto text-slate-200 mb-3" />
-                <p className="text-slate-400 text-sm mb-4">Nenhum condomínio cadastrado</p>
+                <Building2 className="h-10 w-10 mx-auto text-slate-200 dark:text-slate-700 mb-3" />
+                <p className="text-slate-400 dark:text-slate-500 text-sm mb-4">Nenhum condomínio cadastrado</p>
                 <Button size="sm" onClick={openNewCondo} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
                   <Plus className="h-4 w-4" /> Cadastrar primeiro condomínio
                 </Button>
@@ -219,21 +219,21 @@ export default function ConfiguracoesPage() {
                       key={condominium.id}
                       className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
                         isActive
-                          ? "border-blue-200 bg-blue-50"
-                          : "bg-slate-50 hover:bg-slate-100 cursor-pointer"
+                          ? "border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10"
+                          : "bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
                       }`}
                       onClick={() => !isActive && setCurrentCondominiumId(condominium.id)}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 ${isActive ? "bg-blue-600" : "bg-slate-200"}`}>
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 ${isActive ? "bg-blue-600" : "bg-slate-200 dark:bg-slate-700"}`}>
                           {isActive
                             ? <Check className="h-4 w-4 text-white" />
-                            : <Building2 className="h-4 w-4 text-slate-500" />
+                            : <Building2 className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                           }
                         </div>
                         <div>
-                          <p className="font-medium text-sm text-slate-900">{condominium.name}</p>
-                          <p className="text-xs text-slate-500">{condominium.city}, {condominium.state}</p>
+                          <p className="font-medium text-sm text-slate-900 dark:text-slate-100">{condominium.name}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{condominium.city}, {condominium.state}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -310,10 +310,10 @@ export default function ConfiguracoesPage() {
               Sistema
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm text-slate-600">
+          <CardContent className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
             <div className="flex justify-between">
               <span>Versão</span>
-              <span className="font-medium">SindiCore v1.0.0</span>
+              <span className="font-medium">SindiCORE v1.0.0 · by LAMPY</span>
             </div>
             <Separator />
             <div className="flex justify-between">

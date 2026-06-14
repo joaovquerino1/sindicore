@@ -8,7 +8,7 @@ import { getInitials } from "@/lib/utils";
 import {
   LayoutDashboard, Building2, Users, UserCheck, AlertTriangle,
   DollarSign, CalendarDays, Bell, Settings, LogOut, Menu,
-  ChevronLeft, Video,
+  ChevronLeft, Video, Mail, MessageSquare,
 } from "lucide-react";
 
 type NavGroup = {
@@ -38,6 +38,13 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/areas-comuns", label: "Áreas Comuns", icon: CalendarDays },
       { href: "/avisos",       label: "Avisos",       icon: Bell },
       { href: "/assembleias",  label: "Assembleias",  icon: Video },
+    ],
+  },
+  {
+    label: "Comunicação",
+    items: [
+      { href: "/email", label: "E-mail", icon: Mail },
+      { href: "/chat",  label: "Chat",   icon: MessageSquare },
     ],
   },
 ];
@@ -73,7 +80,7 @@ export function Sidebar() {
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex flex-col transition-all duration-300 ease-in-out",
-          "bg-gradient-mesh border-r border-slate-800/60",
+          "bg-gradient-mesh border-r border-white/10",
           sidebarOpen ? "w-64" : "w-16",
           "lg:relative lg:translate-x-0",
           !sidebarOpen && "-translate-x-full lg:translate-x-0"
@@ -82,22 +89,25 @@ export function Sidebar() {
         {/* Logo + toggle */}
         <div
           className={cn(
-            "flex items-center h-16 border-b border-slate-800/60 flex-shrink-0",
+            "flex items-center h-16 border-b border-white/10 flex-shrink-0",
             sidebarOpen ? "px-4" : "justify-center"
           )}
         >
           {sidebarOpen ? (
             <>
               <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-primary shadow-lg shadow-blue-600/30">
+                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-primary shadow-lg shadow-violet-600/40">
                   <Building2 className="h-5 w-5 text-white" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-bold text-white text-base tracking-tight leading-none">
-                    SindiCore
+                  <p
+                    className="font-bold text-white text-base tracking-tight leading-none"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    Sindi<span className="text-gradient">CORE</span>
                   </p>
-                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mt-0.5">
-                    Gestão Condominial
+                  <p className="text-[9px] uppercase tracking-[0.24em] text-violet-200/40 mt-1">
+                    by LAMPY
                   </p>
                 </div>
               </div>
@@ -141,17 +151,17 @@ export function Sidebar() {
                         "group relative flex items-center rounded-lg py-2.5 text-sm font-medium transition-all duration-150",
                         sidebarOpen ? "gap-3 px-3" : "justify-center px-0",
                         active
-                          ? "bg-white/10 text-white"
+                          ? "bg-violet-500/15 text-white"
                           : "text-slate-400 hover:bg-white/5 hover:text-slate-100"
                       )}
                       onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
                     >
                       {active && (
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-blue-500" />
+                        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-r-full bg-violet-400" />
                       )}
                       <Icon className={cn(
                         "h-[18px] w-[18px] flex-shrink-0 transition-transform",
-                        active ? "text-blue-400" : "group-hover:scale-110"
+                        active ? "text-violet-300" : "group-hover:scale-110"
                       )} />
                       {sidebarOpen && <span className="truncate">{label}</span>}
                     </Link>
@@ -163,10 +173,10 @@ export function Sidebar() {
         </nav>
 
         {/* User section */}
-        <div className="flex-shrink-0 px-2 pb-3 space-y-0.5 border-t border-slate-800/60 pt-3">
+        <div className="flex-shrink-0 px-2 pb-3 space-y-0.5 border-t border-white/10 pt-3">
           {user && sidebarOpen && (
             <div className="flex items-center gap-3 px-3 py-2.5 mb-1 rounded-lg bg-white/5">
-              <div className="w-9 h-9 rounded-full bg-gradient-primary flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-lg shadow-blue-600/30">
+              <div className="w-9 h-9 rounded-full bg-gradient-primary flex items-center justify-center flex-shrink-0 text-xs font-bold text-white shadow-lg shadow-violet-600/40">
                 {getInitials(user.name)}
               </div>
               <div className="flex-1 min-w-0">
@@ -181,7 +191,7 @@ export function Sidebar() {
           )}
           {user && !sidebarOpen && (
             <div className="flex justify-center py-1.5">
-              <div className="w-9 h-9 rounded-full bg-gradient-primary flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-blue-600/30">
+              <div className="w-9 h-9 rounded-full bg-gradient-primary flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-violet-600/40">
                 {getInitials(user.name)}
               </div>
             </div>

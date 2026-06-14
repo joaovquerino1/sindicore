@@ -53,17 +53,17 @@ interface Occurrence {
 }
 
 const priorityConfig: Record<string, { label: string; color: string }> = {
-  baixa: { label: "Baixa", color: "bg-blue-100 text-blue-800" },
-  media: { label: "Média", color: "bg-yellow-100 text-yellow-800" },
-  alta: { label: "Alta", color: "bg-orange-100 text-orange-800" },
-  urgente: { label: "Urgente", color: "bg-red-100 text-red-800" },
+  baixa: { label: "Baixa", color: "bg-blue-100 dark:bg-blue-500/15 text-blue-800 dark:text-blue-300" },
+  media: { label: "Média", color: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-800 dark:text-yellow-300" },
+  alta: { label: "Alta", color: "bg-orange-100 dark:bg-orange-500/15 text-orange-800" },
+  urgente: { label: "Urgente", color: "bg-red-100 dark:bg-red-500/15 text-red-800 dark:text-red-300" },
 };
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  aberto: { label: "Aberto", color: "bg-red-100 text-red-800", icon: AlertTriangle },
-  em_andamento: { label: "Em Andamento", color: "bg-yellow-100 text-yellow-800", icon: Wrench },
-  resolvido: { label: "Resolvido", color: "bg-green-100 text-green-800", icon: CheckCircle2 },
-  encerrado: { label: "Encerrado", color: "bg-slate-100 text-slate-700", icon: Clock },
+  aberto: { label: "Aberto", color: "bg-red-100 dark:bg-red-500/15 text-red-800 dark:text-red-300", icon: AlertTriangle },
+  em_andamento: { label: "Em Andamento", color: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-800 dark:text-yellow-300", icon: Wrench },
+  resolvido: { label: "Resolvido", color: "bg-green-100 dark:bg-green-500/15 text-green-800 dark:text-green-300", icon: CheckCircle2 },
+  encerrado: { label: "Encerrado", color: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200", icon: Clock },
 };
 
 const categoryLabels: Record<string, string> = {
@@ -155,8 +155,8 @@ export default function OcorrenciasPage() {
       <div className="space-y-5 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Ocorrências</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Gestão de chamados e incidentes</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Ocorrências</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gestão de chamados e incidentes</p>
           </div>
           <div className="flex gap-2">
             <ExportMenu
@@ -172,36 +172,36 @@ export default function OcorrenciasPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
-          <Card className="border-red-100">
+          <Card className="border-red-100 dark:border-red-500/30">
             <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+              <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="h-5 w-5 text-red-500 dark:text-red-300" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900">{stats.aberto}</p>
-                <p className="text-xs text-slate-500">Em Aberto</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.aberto}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Em Aberto</p>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-amber-100">
+          <Card className="border-amber-100 dark:border-amber-500/30">
             <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center flex-shrink-0">
                 <Wrench className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900">{stats.em_andamento}</p>
-                <p className="text-xs text-slate-500">Em Andamento</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.em_andamento}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Em Andamento</p>
               </div>
             </CardContent>
           </Card>
           <Card className="border-orange-100">
             <CardContent className="p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center flex-shrink-0">
                 <AlertTriangle className="h-5 w-5 text-orange-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-slate-900">{stats.urgente}</p>
-                <p className="text-xs text-slate-500">Urgentes</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.urgente}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Urgentes</p>
               </div>
             </CardContent>
           </Card>
@@ -210,7 +210,7 @@ export default function OcorrenciasPage() {
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
             <Input
               className="pl-9"
               placeholder="Buscar ocorrências..."
@@ -246,7 +246,7 @@ export default function OcorrenciasPage() {
 
         {loading ? (
           <div className="flex items-center justify-center h-40">
-            <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+            <Loader2 className="h-6 w-6 animate-spin text-slate-400 dark:text-slate-500" />
           </div>
         ) : (
           <div className="space-y-3">
@@ -259,7 +259,7 @@ export default function OcorrenciasPage() {
                   key={o.id}
                   className={cn(
                     "hover:shadow-md transition-shadow",
-                    o.priority === "urgente" && o.status !== "resolvido" && "border-red-200"
+                    o.priority === "urgente" && o.status !== "resolvido" && "border-red-200 dark:border-red-500/30"
                   )}
                 >
                   <CardContent className="p-4">
@@ -276,8 +276,8 @@ export default function OcorrenciasPage() {
                             {categoryLabels[o.category]}
                           </Badge>
                         </div>
-                        <p className="text-sm text-slate-600 mt-1 line-clamp-2">{o.description}</p>
-                        <div className="flex items-center gap-3 mt-2 text-xs text-slate-400">
+                        <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 line-clamp-2">{o.description}</p>
+                        <div className="flex items-center gap-3 mt-2 text-xs text-slate-400 dark:text-slate-500">
                           {o.unitNumber && <span>Unidade {o.unitNumber}</span>}
                           {o.user && <span>Por: {o.user.name}</span>}
                           <span>{formatDateTime(o.createdAt)}</span>
@@ -288,7 +288,7 @@ export default function OcorrenciasPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="text-yellow-600 border-yellow-200 hover:bg-yellow-50 gap-1"
+                            className="text-yellow-600 dark:text-yellow-300 border-yellow-200 dark:border-yellow-500/30 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 gap-1"
                             onClick={() => updateStatus(o.id, "em_andamento")}
                           >
                             <Wrench className="h-3.5 w-3.5" />
@@ -317,7 +317,7 @@ export default function OcorrenciasPage() {
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="h-7 w-7 text-slate-400 hover:text-red-500"
+                          className="h-7 w-7 text-slate-400 dark:text-slate-500 hover:text-red-500"
                           onClick={() => handleDelete(o.id)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />

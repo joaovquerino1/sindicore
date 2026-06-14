@@ -385,7 +385,7 @@ function VideoTile({ stream, name, muted = false, isMe = false }: {
           <div className="w-14 h-14 rounded-full bg-slate-700 flex items-center justify-center text-xl font-bold text-white">
             {name.charAt(0).toUpperCase()}
           </div>
-          <span className="text-xs text-slate-400">{isMe ? "Sua câmera" : name}</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">{isMe ? "Sua câmera" : name}</span>
         </div>
       )}
       <div className="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-xs px-2 py-0.5 rounded-md text-white">
@@ -461,7 +461,7 @@ function ChatPanel({ messages, myId, onSend, onClose }: {
     <button
       onMouseDown={(e) => { e.preventDefault(); onMouseDown(e); }}
       title={title}
-      className="w-7 h-7 rounded-md text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors"
+      className="w-7 h-7 rounded-md text-slate-400 dark:text-slate-500 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors"
     >
       {children}
     </button>
@@ -472,7 +472,7 @@ function ChatPanel({ messages, myId, onSend, onClose }: {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 flex-shrink-0">
         <span className="text-white text-sm font-semibold">Chat</span>
-        <button onClick={onClose} className="text-slate-500 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
+        <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -480,7 +480,7 @@ function ChatPanel({ messages, myId, onSend, onClose }: {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full gap-2 text-slate-600">
+          <div className="flex flex-col items-center justify-center h-full gap-2 text-slate-600 dark:text-slate-300">
             <MessageSquare className="h-8 w-8 opacity-40" />
             <p className="text-xs">Nenhuma mensagem ainda</p>
           </div>
@@ -489,13 +489,13 @@ function ChatPanel({ messages, myId, onSend, onClose }: {
           const mine = msg.from === myId;
           return (
             <div key={msg.id} className={`flex flex-col gap-0.5 ${mine ? "items-end" : "items-start"}`}>
-              {!mine && <span className="text-xs text-slate-500 ml-1">{msg.name}</span>}
+              {!mine && <span className="text-xs text-slate-500 dark:text-slate-400 ml-1">{msg.name}</span>}
               <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed break-words ${
                 mine ? "bg-blue-600 text-white rounded-br-sm" : "bg-slate-700 text-slate-100 rounded-bl-sm"
               }`}>
                 {renderMessage(msg.text)}
               </div>
-              <span className="text-[10px] text-slate-600 mx-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-300 mx-1">
                 {new Date(msg.timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
               </span>
             </div>
@@ -521,7 +521,7 @@ function ChatPanel({ messages, myId, onSend, onClose }: {
             <Code2 className="h-3.5 w-3.5" />
           </FmtBtn>
           <div className="flex-1" />
-          <span className="text-[10px] text-slate-600 select-none">**B** *I* __U__</span>
+          <span className="text-[10px] text-slate-600 dark:text-slate-300 select-none">**B** *I* __U__</span>
         </div>
 
         {/* Textarea + send */}
@@ -599,9 +599,9 @@ function AtaPanel({ roomId, onClose }: { roomId: string; onClose: () => void }) 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 flex-shrink-0">
         <span className="flex items-center gap-2 text-white text-sm font-semibold">
-          <FileText className="h-4 w-4 text-blue-400" /> Ata da Reunião
+          <FileText className="h-4 w-4 text-blue-400 dark:text-blue-300" /> Ata da Reunião
         </span>
-        <button onClick={onClose} className="text-slate-500 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
+        <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -619,11 +619,11 @@ function AtaPanel({ roomId, onClose }: { roomId: string; onClose: () => void }) 
 
       {/* Footer */}
       <div className="flex-shrink-0 px-3 pb-3 flex items-center justify-between gap-2 border-t border-slate-800 pt-3">
-        <span className="text-xs text-slate-600 flex items-center gap-1">
+        <span className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1">
           {saving ? (
             <><Loader2 className="h-3 w-3 animate-spin" /> Salvando…</>
           ) : savedAt ? (
-            <><CheckCircle2 className="h-3 w-3 text-green-500" /> Salvo às {savedAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</>
+            <><CheckCircle2 className="h-3 w-3 text-green-500 dark:text-green-300" /> Salvo às {savedAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</>
           ) : (
             "Auto-salva em 3s"
           )}
@@ -659,28 +659,28 @@ function DeviceModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={onClose}>
       <div
-        className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-80 shadow-2xl space-y-5"
+        className="bg-slate-900 border border-slate-700 dark:border-slate-700 rounded-2xl p-6 w-80 shadow-2xl space-y-5"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
           <h3 className="text-white font-semibold text-sm">Dispositivos de áudio/vídeo</h3>
-          <button onClick={onClose} className="text-slate-500 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
+          <button onClick={onClose} className="text-slate-500 dark:text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Camera */}
         <div className="space-y-1.5">
-          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+          <label className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500 font-medium">
             <Camera className="h-3.5 w-3.5" /> Câmera
           </label>
           {videoDevices.length === 0 ? (
-            <p className="text-xs text-slate-600">Nenhuma câmera detectada</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300">Nenhuma câmera detectada</p>
           ) : (
             <select
               value={currentVideoId}
               onChange={(e) => onChangeCamera(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              className="w-full bg-slate-800 border border-slate-700 dark:border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
             >
               {videoDevices.map((d) => (
                 <option key={d.deviceId} value={d.deviceId}>
@@ -693,16 +693,16 @@ function DeviceModal({
 
         {/* Microphone */}
         <div className="space-y-1.5">
-          <label className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+          <label className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500 font-medium">
             <Volume2 className="h-3.5 w-3.5" /> Microfone
           </label>
           {audioDevices.length === 0 ? (
-            <p className="text-xs text-slate-600">Nenhum microfone detectado</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300">Nenhum microfone detectado</p>
           ) : (
             <select
               value={currentAudioId}
               onChange={(e) => onChangeMic(e.target.value)}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+              className="w-full bg-slate-800 border border-slate-700 dark:border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
             >
               {audioDevices.map((d) => (
                 <option key={d.deviceId} value={d.deviceId}>
@@ -743,7 +743,7 @@ function CtrlBtn({ onClick, on, onColor = "bg-slate-700 hover:bg-slate-600", off
           {badge > 9 ? "9+" : badge}
         </span>
       ) : null}
-      <span className="text-[11px] text-slate-400">{label}</span>
+      <span className="text-[11px] text-slate-400 dark:text-slate-500">{label}</span>
     </div>
   );
 }
@@ -850,21 +850,21 @@ export default function MeetingPage() {
               <Shield className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-white font-bold leading-tight">SindiCore</p>
-              <p className="text-slate-500 text-xs">Reunião online</p>
+              <p className="text-white font-bold leading-tight">SindiCORE</p>
+              <p className="text-slate-500 dark:text-slate-400 text-xs">Reunião online</p>
             </div>
           </div>
 
           <div>
             <h2 className="text-white font-semibold truncate">{title}</h2>
-            <p className="text-slate-400 text-sm mt-0.5">Configure seus dispositivos antes de entrar</p>
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-0.5">Configure seus dispositivos antes de entrar</p>
           </div>
 
           {/* Name */}
           <div className="space-y-1.5">
-            <label className="text-slate-300 text-sm">Seu nome</label>
+            <label className="text-slate-300 dark:text-slate-600 text-sm">Seu nome</label>
             <input
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full bg-slate-800 border border-slate-700 dark:border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && nameInput.trim()) { setMyName(nameInput.trim()); setJoined(true); } }}
@@ -875,14 +875,14 @@ export default function MeetingPage() {
 
           {/* Camera select */}
           <div className="space-y-1.5">
-            <label className="flex items-center gap-2 text-slate-300 text-sm">
-              <Camera className="h-3.5 w-3.5 text-slate-400" /> Câmera
+            <label className="flex items-center gap-2 text-slate-300 dark:text-slate-600 text-sm">
+              <Camera className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" /> Câmera
             </label>
             {lobbyVideoDevices.length > 0 ? (
               <select
                 value={selectedVideoId}
                 onChange={(e) => setSelectedVideoId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800 border border-slate-700 dark:border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 {lobbyVideoDevices.map((d) => (
                   <option key={d.deviceId} value={d.deviceId}>
@@ -891,20 +891,20 @@ export default function MeetingPage() {
                 ))}
               </select>
             ) : (
-              <p className="text-xs text-slate-600 px-1">Nenhuma câmera detectada (você entrará apenas com chat)</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 px-1">Nenhuma câmera detectada (você entrará apenas com chat)</p>
             )}
           </div>
 
           {/* Microphone select */}
           <div className="space-y-1.5">
-            <label className="flex items-center gap-2 text-slate-300 text-sm">
-              <Volume2 className="h-3.5 w-3.5 text-slate-400" /> Microfone
+            <label className="flex items-center gap-2 text-slate-300 dark:text-slate-600 text-sm">
+              <Volume2 className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" /> Microfone
             </label>
             {lobbyAudioDevices.length > 0 ? (
               <select
                 value={selectedAudioId}
                 onChange={(e) => setSelectedAudioId(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-800 border border-slate-700 dark:border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
               >
                 {lobbyAudioDevices.map((d) => (
                   <option key={d.deviceId} value={d.deviceId}>
@@ -913,7 +913,7 @@ export default function MeetingPage() {
                 ))}
               </select>
             ) : (
-              <p className="text-xs text-slate-600 px-1">Nenhum microfone detectado</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 px-1">Nenhum microfone detectado</p>
             )}
           </div>
 
@@ -945,7 +945,7 @@ export default function MeetingPage() {
           </div>
           <div className="min-w-0">
             <p className="text-white text-sm font-semibold truncate">{title}</p>
-            <p className="text-slate-500 text-xs">SindiCore · Reunião segura</p>
+            <p className="text-slate-500 dark:text-slate-400 text-xs">SindiCORE · Reunião segura</p>
           </div>
         </div>
         <div className="flex items-center gap-4 flex-shrink-0">
@@ -960,11 +960,11 @@ export default function MeetingPage() {
             </span>
           )}
           {mediaError && (
-            <span className="flex items-center gap-1 text-slate-500 text-xs">
+            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs">
               <CamOffIcon className="h-3 w-3" /> Sem câmera
             </span>
           )}
-          <span className="flex items-center gap-1 text-slate-400 text-sm">
+          <span className="flex items-center gap-1 text-slate-400 dark:text-slate-500 text-sm">
             <Users className="h-4 w-4" />{total}
           </span>
         </div>
@@ -980,7 +980,7 @@ export default function MeetingPage() {
               <div className="w-full max-w-2xl aspect-video">
                 <VideoTile stream={localStream} name={myName} muted isMe />
               </div>
-              <p className="text-slate-500 text-sm">Aguardando outros participantes…</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">Aguardando outros participantes…</p>
             </div>
           ) : (
             <div className={`grid ${gridCols(total)} gap-2 h-full`}>
@@ -1046,7 +1046,7 @@ export default function MeetingPage() {
             >
               <FileText className="h-5 w-5" />
             </button>
-            <span className="text-[11px] text-slate-400">Ata</span>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">Ata</span>
           </div>
 
           {/* Assembly mode */}
@@ -1058,7 +1058,7 @@ export default function MeetingPage() {
             >
               <Users className="h-5 w-5" />
             </button>
-            <span className="text-[11px] text-slate-400">{assemblyMode ? "Assembleia" : "Assembleia"}</span>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">{assemblyMode ? "Assembleia" : "Assembleia"}</span>
           </div>
 
           {/* Devices */}
@@ -1070,7 +1070,7 @@ export default function MeetingPage() {
             >
               <Settings className="h-5 w-5" />
             </button>
-            <span className="text-[11px] text-slate-400">Devices</span>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">Devices</span>
           </div>
 
           <div className="w-px h-10 bg-slate-700 mx-1" />
@@ -1083,7 +1083,7 @@ export default function MeetingPage() {
             >
               <PhoneOff className="h-5 w-5" />
             </button>
-            <span className="text-[11px] text-red-400">Sair</span>
+            <span className="text-[11px] text-red-400 dark:text-red-300">Sair</span>
           </div>
         </div>
       </div>

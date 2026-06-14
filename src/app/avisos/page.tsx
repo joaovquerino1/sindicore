@@ -32,9 +32,9 @@ interface Notice {
 }
 
 const priorityConfig: Record<string, { label: string; badge: string; iconBg: string; iconText: string; icon: React.ElementType }> = {
-  normal:     { label: "Normal",     badge: "bg-blue-100 text-blue-800 border-blue-200",     iconBg: "bg-blue-100",   iconText: "text-blue-600",   icon: Info },
-  importante: { label: "Importante", badge: "bg-orange-100 text-orange-800 border-orange-200", iconBg: "bg-orange-100", iconText: "text-orange-600", icon: AlertCircle },
-  urgente:    { label: "Urgente",    badge: "bg-red-100 text-red-800 border-red-200",         iconBg: "bg-red-100",    iconText: "text-red-600",    icon: Megaphone },
+  normal:     { label: "Normal",     badge: "bg-blue-100 dark:bg-blue-500/15 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-500/30",     iconBg: "bg-blue-100 dark:bg-blue-500/15",   iconText: "text-blue-600 dark:text-blue-300",   icon: Info },
+  importante: { label: "Importante", badge: "bg-orange-100 dark:bg-orange-500/15 text-orange-800 border-orange-200", iconBg: "bg-orange-100 dark:bg-orange-500/15", iconText: "text-orange-600 dark:text-orange-300", icon: AlertCircle },
+  urgente:    { label: "Urgente",    badge: "bg-red-100 dark:bg-red-500/15 text-red-800 dark:text-red-300 border-red-200 dark:border-red-500/30",         iconBg: "bg-red-100 dark:bg-red-500/15",    iconText: "text-red-600 dark:text-red-300",    icon: Megaphone },
 };
 
 const categoryLabels: Record<string, string> = {
@@ -97,8 +97,8 @@ export default function AvisosPage() {
       <div className="space-y-5 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Avisos</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Comunicados e informes do condomínio</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Avisos</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Comunicados e informes do condomínio</p>
           </div>
           <Button onClick={() => setDialog(true)} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
             <Plus className="h-4 w-4" />
@@ -108,13 +108,13 @@ export default function AvisosPage() {
 
         {loading ? (
           <div className="flex items-center justify-center h-40">
-            <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
+            <Loader2 className="h-6 w-6 animate-spin text-slate-400 dark:text-slate-500" />
           </div>
         ) : notices.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16">
-              <Bell className="h-12 w-12 text-slate-200 mb-4" />
-              <p className="text-slate-500">Nenhum aviso publicado</p>
+              <Bell className="h-12 w-12 text-slate-200 dark:text-slate-700 mb-4" />
+              <p className="text-slate-500 dark:text-slate-400">Nenhum aviso publicado</p>
               <Button className="mt-4 gap-2 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setDialog(true)}>
                 <Plus className="h-4 w-4" />
                 Publicar Aviso
@@ -144,12 +144,12 @@ export default function AvisosPage() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-semibold text-slate-900">{notice.title}</h3>
+                            <h3 className="font-semibold text-slate-900 dark:text-slate-100">{notice.title}</h3>
                             <Badge className={`text-xs border ${pc.badge}`}>{pc.label}</Badge>
                             <Badge variant="outline" className="text-xs">{categoryLabels[notice.category]}</Badge>
                           </div>
-                          <p className="text-sm text-slate-600 mt-2 leading-relaxed">{notice.content}</p>
-                          <div className="flex items-center gap-3 mt-3 text-xs text-slate-400">
+                          <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">{notice.content}</p>
+                          <div className="flex items-center gap-3 mt-3 text-xs text-slate-400 dark:text-slate-500">
                             <span>Publicado em {formatDateTime(notice.publishedAt)}</span>
                             {notice.expiresAt && (
                               <span>· Expira em {formatDateTime(notice.expiresAt)}</span>
@@ -160,7 +160,7 @@ export default function AvisosPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-red-400 hover:text-red-600 flex-shrink-0"
+                        className="h-8 w-8 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400 flex-shrink-0"
                         onClick={() => handleDelete(notice.id)}
                       >
                         <Trash2 className="h-3.5 w-3.5" />

@@ -30,11 +30,11 @@ export function ExportMenu({ resource, params = {} }: ExportMenuProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => download("csv")}>
-          <FileText className="h-4 w-4 mr-2 text-slate-500" />
+          <FileText className="h-4 w-4 mr-2 text-slate-500 dark:text-slate-400" />
           CSV
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => download("xlsx")}>
-          <FileSpreadsheet className="h-4 w-4 mr-2 text-green-600" />
+          <FileSpreadsheet className="h-4 w-4 mr-2 text-green-600 dark:text-green-300" />
           Excel (.xlsx)
         </DropdownMenuItem>
       </DropdownMenuContent>

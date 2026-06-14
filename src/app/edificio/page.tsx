@@ -32,7 +32,11 @@ import {
   Pencil,
   Trash2,
   Users,
+  Network,
+  LayoutList,
+  LayoutDashboard,
 } from "lucide-react";
+import { ViewSwitcher } from "@/components/shared/view-switcher";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,9 +91,9 @@ interface Tower {
 }
 
 const statusConfig: Record<UnitStatus, { label: string; color: string }> = {
-  ocupado: { label: "Ocupado", color: "bg-green-100 text-green-700 border-green-200" },
-  vago: { label: "Vago", color: "bg-slate-100 text-slate-600 border-slate-200" },
-  manutencao: { label: "Manutenção", color: "bg-yellow-100 text-yellow-700 border-yellow-200" },
+  ocupado: { label: "Ocupado", color: "bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-300 border-green-200 dark:border-green-500/30" },
+  vago: { label: "Vago", color: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800" },
+  manutencao: { label: "Manutenção", color: "bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-500/30" },
 };
 
 function UnitCard({ unit, onEdit, onDelete }: { unit: Unit; onEdit: (unit: Unit) => void; onDelete: (id: string) => void }) {
@@ -102,7 +106,7 @@ function UnitCard({ unit, onEdit, onDelete }: { unit: Unit; onEdit: (unit: Unit)
       )}
     >
       <button
-        className="absolute top-1 right-1 h-5 w-5 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-red-100 text-red-500"
+        className="absolute top-1 right-1 h-5 w-5 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-slate-900/80 hover:bg-red-100 dark:hover:bg-red-500/15 text-red-500 dark:text-red-300"
         onClick={(e) => { e.stopPropagation(); onDelete(unit.id); }}
         title="Remover unidade"
       >
@@ -150,16 +154,16 @@ function SortableFloorRow({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="border rounded-lg bg-white overflow-hidden">
-      <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors">
-        <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600">
+    <div ref={setNodeRef} style={style} className="border rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+      <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300">
           <GripVertical className="h-4 w-4" />
         </button>
         <button onClick={onToggle} className="flex items-center gap-2 flex-1">
           {expanded ? (
-            <ChevronDown className="h-4 w-4 text-slate-400" />
+            <ChevronDown className="h-4 w-4 text-slate-400 dark:text-slate-500" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-slate-400" />
+            <ChevronRight className="h-4 w-4 text-slate-400 dark:text-slate-500" />
           )}
           <span className="font-medium text-sm">{floor.name}</span>
           <Badge variant="secondary" className="text-xs">
@@ -178,7 +182,7 @@ function SortableFloorRow({
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-red-400 hover:text-red-600"
+            className="h-7 w-7 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
             onClick={() => onDeleteFloor(floor.id)}
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -188,10 +192,10 @@ function SortableFloorRow({
       {expanded && (
         <div className="p-4">
           {floor.units.length === 0 ? (
-            <p className="text-slate-400 text-sm text-center py-4">
+            <p className="text-slate-400 dark:text-slate-500 text-sm text-center py-4">
               Nenhuma unidade cadastrada.{" "}
               <button
-                className="text-blue-500 hover:underline"
+                className="text-blue-500 dark:text-blue-300 hover:underline"
                 onClick={() => onAddUnit(floor.id)}
               >
                 Adicionar unidade
@@ -216,6 +220,7 @@ export default function EdificioPage() {
   const [loading, setLoading] = useState(true);
   const [expandedFloors, setExpandedFloors] = useState<Set<string>>(new Set());
   const [activeTowerId, setActiveTowerId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"hierarchy" | "list" | "summary">("hierarchy");
 
   // Dialogs
   const [towerDialog, setTowerDialog] = useState(false);
@@ -416,32 +421,43 @@ export default function EdificioPage() {
       <div className="space-y-5 max-w-[1200px] mx-auto">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Edifício</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Gerencie torres, andares e unidades com drag-and-drop</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Edifício</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gerencie torres, andares e unidades com drag-and-drop</p>
           </div>
-          <Button onClick={() => { setEditingTowerId(null); setTowerForm({ name: "", code: "" }); setTowerDialog(true); }} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
-            <Plus className="h-4 w-4" />
-            Nova Torre
-          </Button>
+          <div className="flex items-center gap-2">
+            <ViewSwitcher
+              value={viewMode}
+              onChange={setViewMode}
+              options={[
+                { value: "hierarchy", label: "Hierarquia", icon: Network },
+                { value: "list", label: "Lista", icon: LayoutList },
+                { value: "summary", label: "Resumo", icon: LayoutDashboard },
+              ]}
+            />
+            <Button onClick={() => { setEditingTowerId(null); setTowerForm({ name: "", code: "" }); setTowerDialog(true); }} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white">
+              <Plus className="h-4 w-4" />
+              Nova Torre
+            </Button>
+          </div>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-slate-400 dark:text-slate-500" />
           </div>
         ) : towers.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <Building2 className="h-16 w-16 text-slate-200 mb-4" />
-              <h2 className="text-lg font-semibold text-slate-700">Nenhuma torre cadastrada</h2>
-              <p className="text-slate-400 mt-1 mb-6">Comece adicionando a primeira torre do condomínio.</p>
+              <Building2 className="h-16 w-16 text-slate-200 dark:text-slate-700 mb-4" />
+              <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-200">Nenhuma torre cadastrada</h2>
+              <p className="text-slate-400 dark:text-slate-500 mt-1 mb-6">Comece adicionando a primeira torre do condomínio.</p>
               <Button onClick={() => { setEditingTowerId(null); setTowerForm({ name: "", code: "" }); setTowerDialog(true); }} className="gap-2">
                 <Plus className="h-4 w-4" />
                 Adicionar Torre
               </Button>
             </CardContent>
           </Card>
-        ) : (
+        ) : viewMode === "hierarchy" ? (
           <div className="space-y-6">
             {towers.map((tower) => (
               <Card key={tower.id} className="overflow-hidden">
@@ -453,7 +469,7 @@ export default function EdificioPage() {
                       </div>
                       <div>
                         <CardTitle className="text-white">{tower.name}</CardTitle>
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-slate-400 dark:text-slate-500 text-sm">
                           {tower.floors.length} andares ·{" "}
                           {tower.floors.reduce((sum, f) => sum + f.units.length, 0)} unidades
                         </p>
@@ -477,7 +493,7 @@ export default function EdificioPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-slate-300 hover:bg-slate-700 hover:text-white"
+                        className="text-slate-300 dark:text-slate-600 hover:bg-slate-700 hover:text-white"
                         onClick={() => {
                           setEditingTowerId(tower.id);
                           setTowerForm({ name: tower.name, code: tower.code ?? "" });
@@ -489,7 +505,7 @@ export default function EdificioPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-red-400 hover:bg-red-900/20"
+                        className="text-red-400 dark:text-red-300 hover:bg-red-900/20"
                         onClick={() => handleDeleteTower(tower.id)}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -509,10 +525,10 @@ export default function EdificioPage() {
                     >
                       <div className="space-y-2">
                         {tower.floors.length === 0 ? (
-                          <p className="text-slate-400 text-sm text-center py-8">
+                          <p className="text-slate-400 dark:text-slate-500 text-sm text-center py-8">
                             Nenhum andar.{" "}
                             <button
-                              className="text-blue-500 hover:underline"
+                              className="text-blue-500 dark:text-blue-300 hover:underline"
                               onClick={() => {
                                 setSelectedTowerId(tower.id);
                                 setFloorDialog(true);
@@ -550,6 +566,154 @@ export default function EdificioPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        ) : viewMode === "list" ? (
+          <Card>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-slate-50 dark:bg-slate-900/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-medium">Unidade</th>
+                    <th className="text-left px-4 py-3 font-medium">Torre</th>
+                    <th className="text-left px-4 py-3 font-medium hidden md:table-cell">Andar</th>
+                    <th className="text-left px-4 py-3 font-medium hidden lg:table-cell">Tipo</th>
+                    <th className="text-left px-4 py-3 font-medium">Status</th>
+                    <th className="text-left px-4 py-3 font-medium hidden xl:table-cell">Área</th>
+                    <th className="text-left px-4 py-3 font-medium hidden xl:table-cell">Q · B · V</th>
+                    <th className="text-left px-4 py-3 font-medium">Moradores</th>
+                    <th className="px-4 py-3 w-20"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {towers.flatMap((tower) =>
+                    [...tower.floors]
+                      .sort((a, b) => b.order - a.order)
+                      .flatMap((floor) =>
+                        floor.units.map((u) => {
+                          const sc = statusConfig[u.status];
+                          return (
+                            <tr key={u.id} className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                              <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{u.number}</td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{tower.name}</td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden md:table-cell">{floor.name}</td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300 capitalize hidden lg:table-cell">{u.type}</td>
+                              <td className="px-4 py-3">
+                                <span className={cn("inline-block px-2 py-0.5 rounded-full text-xs font-medium border", sc.color)}>
+                                  {sc.label}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden xl:table-cell">
+                                {u.area ? `${u.area}m²` : "—"}
+                              </td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300 hidden xl:table-cell">
+                                {[u.bedrooms, u.bathrooms, u.parking].map((n) => n ?? 0).join(" · ")}
+                              </td>
+                              <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                                {u._count?.residents ? (
+                                  <span className="inline-flex items-center gap-1">
+                                    <Users className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
+                                    {u._count.residents}
+                                  </span>
+                                ) : "—"}
+                              </td>
+                              <td className="px-4 py-3">
+                                <div className="flex justify-end gap-1">
+                                  <Button variant="ghost" size="icon" className="h-7 w-7"
+                                    onClick={() => openUnitDialog(u)}>
+                                    <Pencil className="h-3.5 w-3.5" />
+                                  </Button>
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 text-red-400 dark:text-red-300 hover:text-red-600 dark:hover:text-red-400"
+                                    onClick={() => handleDeleteUnit(u.id)}>
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )
+                  )}
+                  {towers.every((t) => t.floors.every((f) => f.units.length === 0)) && (
+                    <tr>
+                      <td colSpan={9} className="text-center text-slate-400 dark:text-slate-500 py-10 text-sm">
+                        Nenhuma unidade cadastrada
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {towers.map((tower) => {
+              const allUnits = tower.floors.flatMap((f) => f.units);
+              const ocupado = allUnits.filter((u) => u.status === "ocupado").length;
+              const vago = allUnits.filter((u) => u.status === "vago").length;
+              const manutencao = allUnits.filter((u) => u.status === "manutencao").length;
+              const total = allUnits.length;
+              const moradores = allUnits.reduce((s, u) => s + (u._count?.residents ?? 0), 0);
+              const ocupacao = total > 0 ? Math.round((ocupado / total) * 100) : 0;
+              return (
+                <Card key={tower.id} className="overflow-hidden">
+                  <CardHeader className="bg-slate-900 text-white py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
+                        {tower.code || tower.name[0]}
+                      </div>
+                      <div>
+                        <CardTitle className="text-white text-base">{tower.name}</CardTitle>
+                        <p className="text-slate-400 dark:text-slate-500 text-xs">
+                          {tower.floors.length} andares · {total} unidades
+                        </p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-4">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span>Ocupação</span>
+                        <span className="font-semibold text-slate-700 dark:text-slate-200">{ocupacao}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                        <div
+                          className="h-full bg-green-500 rounded-full transition-all"
+                          style={{ width: `${ocupacao}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className="rounded-lg bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/30 p-2">
+                        <p className="text-lg font-bold text-green-700 dark:text-green-300">{ocupado}</p>
+                        <p className="text-[10px] text-green-700 dark:text-green-300/70 uppercase tracking-wide">Ocupados</p>
+                      </div>
+                      <div className="rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 p-2">
+                        <p className="text-lg font-bold text-slate-700 dark:text-slate-200">{vago}</p>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wide">Vagos</p>
+                      </div>
+                      <div className="rounded-lg bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-100 dark:border-yellow-500/30 p-2">
+                        <p className="text-lg font-bold text-yellow-700 dark:text-yellow-300">{manutencao}</p>
+                        <p className="text-[10px] text-yellow-700 dark:text-yellow-300/70 uppercase tracking-wide">Manutenção</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-sm border-t pt-3">
+                      <span className="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5" />
+                        Moradores
+                      </span>
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">{moradores}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 dark:text-slate-400 inline-flex items-center gap-1.5">
+                        <Home className="h-3.5 w-3.5" />
+                        Andares
+                      </span>
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">{tower.floors.length}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>

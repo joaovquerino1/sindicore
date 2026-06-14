@@ -103,24 +103,24 @@ export function ImportModal({ open, onOpenChange, resource, condominiumId, onSuc
 
         <div className="space-y-4">
           {/* Template info */}
-          <div className="rounded-lg border bg-blue-50 p-3 space-y-2">
+          <div className="rounded-lg border bg-blue-50 dark:bg-blue-500/10 p-3 space-y-2">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-blue-800">Formato esperado</p>
-              <Button size="sm" variant="link" className="p-0 h-auto text-blue-600 gap-1"
+              <p className="text-sm font-medium text-blue-800 dark:text-blue-300">Formato esperado</p>
+              <Button size="sm" variant="link" className="p-0 h-auto text-blue-600 dark:text-blue-300 gap-1"
                 onClick={downloadTemplate}>
                 <Download className="h-3.5 w-3.5" /> Template CSV
               </Button>
             </div>
-            <p className="text-xs text-blue-700 font-mono">
+            <p className="text-xs text-blue-700 dark:text-blue-300 font-mono">
               {meta.columns.join(" | ")}
             </p>
-            <p className="text-xs text-slate-500">Ex: {meta.example}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Ex: {meta.example}</p>
           </div>
 
           {/* Drop zone */}
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              dragging ? "border-blue-400 bg-blue-50" : "hover:border-slate-300"
+              dragging ? "border-blue-400 bg-blue-50 dark:bg-blue-500/10" : "hover:border-slate-300 dark:hover:border-slate-700"
             }`}
             onClick={() => inputRef.current?.click()}
             onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
@@ -129,14 +129,14 @@ export function ImportModal({ open, onOpenChange, resource, condominiumId, onSuc
           >
             {file ? (
               <div className="flex items-center justify-center gap-2">
-                <FileText className="h-5 w-5 text-blue-500" />
-                <span className="text-sm font-medium text-slate-700">{file.name}</span>
+                <FileText className="h-5 w-5 text-blue-500 dark:text-blue-300" />
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{file.name}</span>
               </div>
             ) : (
               <>
-                <Upload className="h-8 w-8 mx-auto text-slate-300 mb-2" />
-                <p className="text-sm text-slate-500">Clique ou arraste o arquivo aqui</p>
-                <p className="text-xs text-slate-400 mt-1">CSV ou Excel (.xlsx)</p>
+                <Upload className="h-8 w-8 mx-auto text-slate-300 dark:text-slate-600 mb-2" />
+                <p className="text-sm text-slate-500 dark:text-slate-400">Clique ou arraste o arquivo aqui</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">CSV ou Excel (.xlsx)</p>
               </>
             )}
           </div>
@@ -151,12 +151,12 @@ export function ImportModal({ open, onOpenChange, resource, condominiumId, onSuc
           {/* Results */}
           {result && (
             <div className="space-y-2 max-h-40 overflow-y-auto">
-              <div className="flex items-center gap-2 text-sm text-green-700">
+              <div className="flex items-center gap-2 text-sm text-green-700 dark:text-green-300">
                 <CheckCircle className="h-4 w-4 shrink-0" />
                 <span>{result.created} registro{result.created !== 1 ? "s" : ""} importado{result.created !== 1 ? "s" : ""} com sucesso</span>
               </div>
               {result.errors.map((e, i) => (
-                <div key={i} className="flex items-start gap-2 text-sm text-red-600">
+                <div key={i} className="flex items-start gap-2 text-sm text-red-600 dark:text-red-300">
                   <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>Linha {e.row}: {e.message}</span>
                 </div>

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,21 +10,28 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const sora = Sora({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700", "800"],
+  variable: "--font-sora",
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "SindiCore — Gestão Condominial Inteligente",
-    template: "%s | SindiCore",
+    default: "SindiCORE — Gestão condominial sob medida",
+    template: "%s | SindiCORE",
   },
   description:
-    "Plataforma completa de gestão condominial: moradores, ocorrências, finanças, assembleias com videoconferência e controle de visitantes em tempo real.",
+    "Plataforma completa de gestão condominial: moradores, ocorrências, finanças, assembleias com videoconferência e controle de visitantes em tempo real. Um produto LAMPY.",
   keywords: [
     "condomínio", "síndico", "gestão condominial", "portaria",
     "assembleia online", "controle financeiro condomínio",
   ],
-  authors: [{ name: "SindiCore" }],
+  authors: [{ name: "LAMPY" }],
   appleWebApp: {
     capable: true,
-    title: "SindiCore",
+    title: "SindiCORE",
     statusBarStyle: "black-translucent",
   },
   formatDetection: {
@@ -38,8 +46,8 @@ export const viewport: Viewport = {
   userScalable: false,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)",  color: "#0f172a" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f5fc" },
+    { media: "(prefers-color-scheme: dark)",  color: "#14111f" },
   ],
 };
 
@@ -49,23 +57,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`h-full ${inter.variable}`}>
+    <html lang="pt-BR" className={`h-full ${inter.variable} ${sora.variable}`} suppressHydrationWarning>
       <body
-        className="h-full antialiased font-sans"
+        className="h-full antialiased font-sans bg-background text-foreground"
         style={{ overscrollBehavior: "none" }}
       >
-        {children}
-        <Toaster
-          position="top-right"
-          richColors
-          closeButton
-          theme="light"
-          toastOptions={{
-            classNames: {
-              toast: "shadow-lg border border-slate-200",
-            },
-          }}
-        />
+        <ThemeProvider>
+          {children}
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              classNames: {
+                toast: "shadow-lg border border-border",
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

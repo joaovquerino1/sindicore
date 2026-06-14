@@ -122,6 +122,29 @@ app.prepare().then(() => {
     });
   });
 
+  // ── Chat interno: namespace /chat ─────────────────────────────────────
+  // Cliente conecta com auth.userId (id do usuário) e entra em rooms por channelId.
+  // Evento: "join-channel" { channelId } -> entra na room.
+  // Evento: "leave-channel" { channelId } -> sai da room.
+  // Evento "message" é DISPARADO pelo backend (POST /api/chat/.../messages) via
+  // chamada interna a esse namespace via http? Não — usamos broadcast em-cliente:
+  // após o cliente fazer POST e receber o objeto de mensagem, ele emite "broadcast"
+  // pra notificar os outros membros. Isso evita acoplar o route handler ao io.
+  const chatIo = io.of("/chat");
+  chatIo.on("connection", (socket) => {
+    socket.on("join-channel", ({ channelId }) => {
+      if (typeof channelId === "string") socket.join(`chat:${channelId}`);
+    });
+    socket.on("leave-channel", ({ channelId }) => {
+      if (typeof channelId === "string") socket.leave(`chat:${channelId}`);
+    });
+    socket.on("broadcast", ({ channelId, message }) => {
+      if (!channelId || !message) return;
+      // Envia pra todos na room exceto o emissor (que já tem a mensagem do POST)
+      socket.to(`chat:${channelId}`).emit("message", { channelId, message });
+    });
+  });
+
   httpServer.listen(port, () => {
     console.log(
       `> Server listening at http://localhost:${port} as ${dev ? "development" : process.env.NODE_ENV}`
